@@ -14,6 +14,6 @@ extern {
 }
 
 #[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, {{project-name}}!");
+pub fn greet(s:&str) {
+    alert(&format!("Hello, {}",s));
 }
