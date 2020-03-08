@@ -7,6 +7,7 @@
   <style>
     body {
       position: absolute;
+      margin: 0;
       top: 0;
       left: 0;
       width: 100%;
@@ -20,8 +21,12 @@
 </head>
 
 <body>
-  <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
-  <canvas id="game-of-life-canvas" style="width: 700px;"></canvas>
+  <div style="display: flex;">
+    <span style="font-size: 32px;" id="framecount"></span>
+    <noscript>This page contains webassembly and javascript content, please enable javascript in your
+      browser.</noscript>
+    <canvas id="game-of-life-canvas" style="width: 700px;"></canvas>
+  </div>
   <script src='./bootstrap.js'></script>
 </body>
 
