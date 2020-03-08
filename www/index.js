@@ -60,10 +60,8 @@ const getIndex = (row, column) => {
 
 const drawCells = () => {
     const cellsPtr = universe.cells();
-    console.log(cellsPtr);
     const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
 
-    console.log("cells: " + cells)
     ctx.beginPath();
 
     for (let row = 0; row < height; row++) {
