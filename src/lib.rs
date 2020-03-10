@@ -9,6 +9,7 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+/*
 #[wasm_bindgen]
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -16,6 +17,7 @@ pub enum Cell {
     Dead = 0,
     Alive = 1,
 }
+*/
 
 #[wasm_bindgen]
 pub struct Universe {
@@ -107,6 +109,33 @@ impl Universe {
 
     pub fn cells(&self) -> *const u8 {
         self.cells.as_ptr()
+    }
+
+    pub fn set_width(&mut self, width: u32){
+        self.width = width;
+        self.cells = (0..width * self.height).map(|_i| 0).collect();
+    }
+
+    pub fn set_height(&mut self, height: u32) {
+        self.height =  height;
+        self.cells = (0..height * self.height).map(|_i| 0).collect();
+    }
+
+}
+
+impl Universe {
+    /// Get the dead and alive values of the entire universe.
+    pub fn get_cells(&self) -> &[u8] {
+        &self.cells
+    }
+
+    /// Set cells to be alive in a universe by passing the row and column
+    /// of each cell as an array.
+    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+        for (row, col) in cells.iter().cloned() {
+            let idx = self.get_index(row, col);
+            self.cells[idx] = 1;
+        }
     }
 }
 
