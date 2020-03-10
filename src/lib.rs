@@ -1,3 +1,5 @@
+extern crate web_sys;
+
 mod utils;
 
 use std::fmt;
@@ -9,15 +11,12 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-/*
-#[wasm_bindgen]
-#[repr(u8)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Cell {
-    Dead = 0,
-    Alive = 1,
+// A macro to provide `println!(..)`-style syntax for `console.log` logging.
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        web_sys::console::log_1(&format!( $( $t )* ).into());
+    }
 }
-*/
 
 #[wasm_bindgen]
 pub struct Universe {
@@ -29,8 +28,9 @@ pub struct Universe {
 #[wasm_bindgen]
 impl Universe {
     pub fn new() -> Universe {
-        let width = 64;
-        let height = 64;
+        utils::set_panic_hook();
+        let width = 8;
+        let height = 8;
 
         let cells = (0..width * height)
             .map(|i| if i % 2 == 0 || i % 7 == 0 { 1 } else { 0 })
@@ -62,16 +62,16 @@ impl Universe {
                 let next_cell = match (cell, live_neighbors) {
                     // Rule 1: Any live cell with fewer than two live neighbours
                     // dies, as if caused by underpopulation.
-                    (1, x) if x < 2 => 0,
+                    (1, x) if x < 2 => {log!("cell [{},{}] has DIED!",row,col); 0},
                     // Rule 2: Any live cell with two or three live neighbours
                     // lives on to the next generation.
-                    (1, 2) | (1, 3) => 1,
+                    (1, 2) | (1, 3) => {log!("cell [{},{}] is ALIVE!",row,col);1},
                     // Rule 3: Any live cell with more than three live
                     // neighbours dies, as if by overpopulation.
-                    (1, x) if x > 3 => 0,
+                    (1, x) if x > 3 => {log!("cell [{},{}] has DIED!",row,col);0},
                     // Rule 4: Any dead cell with exactly three live neighbours
                     // becomes a live cell, as if by reproduction.
-                    (0, 3) => 1,
+                    (0, 3) => {log!("cell [{},{}] is ALIVE!",row,col);1},
                     // All other cells remain in the same state.
                     (otherwise, _) => otherwise,
                 };
@@ -111,16 +111,15 @@ impl Universe {
         self.cells.as_ptr()
     }
 
-    pub fn set_width(&mut self, width: u32){
+    pub fn set_width(&mut self, width: u32) {
         self.width = width;
         self.cells = (0..width * self.height).map(|_i| 0).collect();
     }
 
     pub fn set_height(&mut self, height: u32) {
-        self.height =  height;
+        self.height = height;
         self.cells = (0..height * self.height).map(|_i| 0).collect();
     }
-
 }
 
 impl Universe {
@@ -148,7 +147,6 @@ impl fmt::Display for Universe {
             }
             write!(f, "\n")?;
         }
-
         Ok(())
     }
 }

@@ -24,8 +24,9 @@ const frame_counter = document.getElementById("framecount")
 let fc = 0;
 
 const renderLoop = () => {
+    // debugger;
     frame_counter.textContent = fc++;
-    if (fc < 500) {
+    if (fc < 100) {
         universe.tick();
 
         drawGrid();
