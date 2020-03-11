@@ -20,8 +20,18 @@ canvas.width = (CELL_SIZE + 1) * width + 1;
 const ctx = canvas.getContext('2d');
 
 const frame_counter = document.getElementById("framecount")
-
 let fc = 0;
+
+const playButton = document.getElementById("play-pause");
+playButton.addEventListener("click", event => {
+    if (isPaused()){
+        play();
+    }
+    else{
+        pause();
+    }
+})
+let animationId = null;
 
 const renderLoop = () => {
     // debugger;
@@ -32,9 +42,24 @@ const renderLoop = () => {
         drawGrid();
         drawCells();
 
-        requestAnimationFrame(renderLoop);
+        animationId = requestAnimationFrame(renderLoop);
     }
 };
+
+const isPaused = () => {
+    return animationId === null;
+}
+
+const play = () => {
+    playButton.textContent = "⏸";
+    renderLoop();
+}
+
+const pause = () => {
+    playButton.textContent = "▶";
+    cancelAnimationFrame(animationId);
+    animationId = null;
+}
 
 const drawGrid = () => {
     ctx.beginPath();
@@ -51,7 +76,6 @@ const drawGrid = () => {
         ctx.moveTo(0, j * (CELL_SIZE + 1) + 1);
         ctx.lineTo((CELL_SIZE + 1) * width + 1, j * (CELL_SIZE + 1) + 1);
     }
-
     ctx.stroke();
 };
 
@@ -81,10 +105,9 @@ const drawCells = () => {
             );
         }
     }
-
     ctx.stroke();
 };
 
 drawGrid();
 drawCells();
-requestAnimationFrame(renderLoop);
+play();
