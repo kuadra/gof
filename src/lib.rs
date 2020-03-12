@@ -26,10 +26,16 @@ pub enum Cell {
     Alive = 1,
 }
 
-impl Cell{
-    fn toggle(&mut self){
+impl Cell {
+    fn toggle(&mut self) {
         *self = match *self {
-            
+         //al click -> cambia stato
+         //deve essere per forza un oggetto?
+         //si puo codificare lo stato in qualche modo?
+         //00=0 01=1 
+         //altri due stati codificabili
+         //codifica non efficiente
+         //cosa altro posso codificare?
         }
     }
 }
@@ -78,16 +84,28 @@ impl Universe {
                 let next_cell = match (cell, live_neighbors) {
                     // Rule 1: Any live cell with fewer than two live neighbours
                     // dies, as if caused by underpopulation.
-                    (1, x) if x < 2 => {log!("cell [{},{}] has DIED!",row,col); 0},
+                    (1, x) if x < 2 => {
+                        log!("cell [{},{}] has DIED!", row, col);
+                        0
+                    }
                     // Rule 2: Any live cell with two or three live neighbours
                     // lives on to the next generation.
-                    (1, 2) | (1, 3) => {log!("cell [{},{}] is ALIVE!",row,col);1},
+                    (1, 2) | (1, 3) => {
+                        log!("cell [{},{}] is ALIVE!", row, col);
+                        1
+                    }
                     // Rule 3: Any live cell with more than three live
                     // neighbours dies, as if by overpopulation.
-                    (1, x) if x > 3 => {log!("cell [{},{}] has DIED!",row,col);0},
+                    (1, x) if x > 3 => {
+                        log!("cell [{},{}] has DIED!", row, col);
+                        0
+                    }
                     // Rule 4: Any dead cell with exactly three live neighbours
                     // becomes a live cell, as if by reproduction.
-                    (0, 3) => {log!("cell [{},{}] is ALIVE!",row,col);1},
+                    (0, 3) => {
+                        log!("cell [{},{}] is ALIVE!", row, col);
+                        1
+                    }
                     // All other cells remain in the same state.
                     (otherwise, _) => otherwise,
                 };
