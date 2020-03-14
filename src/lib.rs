@@ -54,14 +54,23 @@ impl Universe {
         let width = 8;
         let height = 8;
 
-        let cells = (0..width * height)
-            .map(|i| if i % 2 == 0 || i % 7 == 0 { 1 } else { 0 })
-            .collect();
+        let cells = (0..width * height).map(|i| cloto(i)).collect();
 
         Universe {
             width,
             height,
             cells,
+        }
+    }
+
+    fn cloto(&self, i: u8) -> u8 {
+        if i % 2 == 0 {
+            return 1;
+        }
+        if i % 7 == 0 {
+            0
+        } else {
+            0
         }
     }
 
