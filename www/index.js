@@ -25,7 +25,7 @@ let fc = 0;
 
 const renderLoop = () => {
     frame_counter.textContent = fc++;
-    if (fc < 500) {
+    if (true) {
         universe.tick();
 
         drawGrid();
